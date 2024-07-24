@@ -47,6 +47,9 @@ document.querySelector(".game-info .category span").innerHTML = randomPropName;
 let lettersGuessContainer = document.querySelector(".letters-guess");
 // convert chosen word to array
 let lettersAndSpace = Array.from(randomValueValue);
+// increase success counter
+
+let successCounter = 0;
 // create spans depend on word
 lettersAndSpace.forEach(letter => {
     // create empty span
@@ -86,6 +89,8 @@ document.addEventListener("click",(e)=>{
                 guessSpans.forEach((span, spanIndex) =>{
                     if (wordIndex === spanIndex) {
                         span.innerHTML = theClickedLetter;
+                        // increase success counter
+                        successCounter++;
                     }
                 });
             }
@@ -101,21 +106,24 @@ document.addEventListener("click",(e)=>{
             // play fail sound
             document.getElementById("fail").play();
             if (wrongAttempts === 8) {
-                endGame();
-                lettersContainer.classList.add("finished");
+                endGame(`Game Over !, The Word Is ${randomValue}.`);
             }
         } else {
             // play success sound
             document.getElementById("success").play();
+            if (successCounter === lettersAndSpace.length) {
+                endGame(`You Win , You Made ${wrongAttempts} Wrong Attempts.`);
+            }
         }
     }
 });
 // end game function
-function endGame() {
+function endGame(txt) {
+    lettersContainer.classList.add("finished");
     // create popup div
     let div = document.createElement("div");
     // create text 
-    let divText = document.createTextNode(`Game Over, The Word Is ${randomValueValue}`);
+    let divText = document.createTextNode(txt);
     // append text to div
     div.appendChild(divText);
     // add class on div
